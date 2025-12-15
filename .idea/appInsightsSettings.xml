@@ -8,10 +8,10 @@
             <InsightsFilterSettings>
               <option name="connection">
                 <ConnectionSetting>
-                  <option name="appId" value="PLACEHOLDER" />
-                  <option name="mobileSdkAppId" value="" />
-                  <option name="projectId" value="" />
-                  <option name="projectNumber" value="" />
+                  <option name="appId" value="carmel.shubeli.euchre" />
+                  <option name="mobileSdkAppId" value="1:110466726996:android:a1acabdb69885cc5d741c1" />
+                  <option name="projectId" value="euchre-93a00" />
+                  <option name="projectNumber" value="110466726996" />
                 </ConnectionSetting>
               </option>
               <option name="signal" value="SIGNAL_UNSPECIFIED" />
