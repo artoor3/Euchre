@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "110466726996",
+    "project_id": "euchre-93a00",
+    "storage_bucket": "euchre-93a00.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:110466726996:android:a1acabdb69885cc5d741c1",
+        "android_client_info": {
+          "package_name": "carmel.shubeli.euchre"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAZFuGK7hgVowaShSUqvVNaV0HlGJCLAyM"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

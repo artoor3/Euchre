@@ -9,10 +9,16 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.Euchre">
         <activity
-            android:name=".StartActivity"
+            android:name=".AboutActivity"
             android:exported="false" />
         <activity
-            android:name=".LoginActivity"
+            android:name=".OfflineGameActivity"
+            android:exported="false" />
+        <activity
+            android:name=".RulesActivity"
+            android:exported="false" /> <!-- START SCREEN -->
+        <activity
+            android:name=".StartActivity"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -21,10 +27,13 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".MainActivity"
+            android:name=".LoginActivity"
             android:exported="false" />
         <activity
             android:name=".RegisterActivity"
+            android:exported="false" />
+        <activity
+            android:name=".MainActivity"
             android:exported="false" />
     </application>
 
