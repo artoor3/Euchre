@@ -8,6 +8,11 @@ public class GameEngine {
     private Suit trumpSuit;
     private Card trumpCard;
     private int currentPlayer;
+    private boolean trumpChosen = false;
+    private int trumpCaller = -1;
+    public int getTrumpCaller() {
+        return trumpCaller;
+    }
 
     public GameEngine() {
         for (int i = 0; i < 4; i++) {
@@ -44,6 +49,7 @@ public class GameEngine {
         trumpSuit = trumpCard.getSuit();
         // First trick starts left of dealer
         currentPlayer = (dealerIndex + 1) % 4;
+        trumpChosen = false;
 
     }
 
@@ -140,6 +146,18 @@ public class GameEngine {
         Player player = players[playerIndex];
         Card played = player.getHand().remove(cardIndex);
         return played;
+    }
+    public boolean isTrumpChosen() {
+        return trumpChosen;
+    }
+    public void orderUpTrump(int callerPlayer) {
+        trumpSuit = trumpCard.getSuit();
+        trumpChosen = true;
+        trumpCaller = callerPlayer;
+    }
+
+    public void resetTrump() {
+        trumpChosen = false;
     }
 
 }

@@ -1,30 +1,33 @@
 package carmel.shubeli.euchre;
 
 import android.os.Bundle;
-import android.util.Log;
-import android.widget.TextView;
-
-import androidx.activity.EdgeToEdge;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.graphics.Insets;
-import androidx.core.view.ViewCompat;
-import androidx.core.view.WindowInsetsCompat;
-
-import carmel.shubeli.euchre.game.GameEngine;
-import carmel.shubeli.euchre.game.Player;
-import carmel.shubeli.euchre.game.Card;
+import android.view.View;
 import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import androidx.appcompat.app.AppCompatActivity;
+
+import carmel.shubeli.euchre.game.Card;
+import carmel.shubeli.euchre.game.GameEngine;
+import carmel.shubeli.euchre.game.Player;
 
 public class OfflineGameActivity extends AppCompatActivity {
+
     private GameEngine engine;
     private Card[] currentTrick = new Card[4];
     private int leadPlayer;
-    private int tricksTeamUs = 0;    // Players 0 & 2
-    private int tricksTeamThem = 0;  // Players 1 & 3
+
+    private int tricksTeamUs = 0;
+    private int tricksTeamThem = 0;
     private int tricksPlayed = 0;
+
+    private int scoreUs = 0;
+    private int scoreThem = 0;
+
+    private Button btnOrderUp;
+    private Button btnPass;
+    private TextView tvInfo;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -35,10 +38,25 @@ public class OfflineGameActivity extends AppCompatActivity {
         engine.startNewRound();
         leadPlayer = engine.getCurrentPlayer();
 
-        TextView tvInfo = findViewById(R.id.tvCenterInfo);
-        tvInfo.setText("Your turn");
+        tvInfo = findViewById(R.id.tvCenterInfo);
+        btnOrderUp = findViewById(R.id.btnOrderUp);
+        btnPass = findViewById(R.id.btnPass);
 
-        renderMyHand();
+        tvInfo.setText("Trump card: " + engine.getTrumpCard() + "\nOrder up?");
+
+        btnOrderUp.setOnClickListener(v -> {
+            engine.orderUpTrump(0);
+            tvInfo.setText("You ordered up. Trump is " + engine.getTrumpSuit());
+            hideTrumpButtons();
+            renderMyHand();
+        });
+
+        btnPass.setOnClickListener(v -> {
+            engine.orderUpTrump(1);
+            tvInfo.setText("AI ordered up. Trump is " + engine.getTrumpSuit());
+            hideTrumpButtons();
+            renderMyHand();
+        });
     }
 
     private void renderMyHand() {
@@ -61,22 +79,15 @@ public class OfflineGameActivity extends AppCompatActivity {
     }
 
     private void playMyCard(int cardIndex) {
-        if (tricksPlayed >= 5) {
-            return;
-        }
+        if (tricksPlayed >= 5) return;
 
-        // Player 0 plays
         currentTrick[0] = engine.playCard(0, cardIndex);
-
-        TextView tvInfo = findViewById(R.id.tvCenterInfo);
         tvInfo.setText("You played: " + currentTrick[0]);
 
-        // AI players play automatically
         for (int i = 1; i < 4; i++) {
             currentTrick[i] = engine.playCard(i, 0);
         }
 
-        // Determine winner
         int winner = engine.determineTrickWinner(currentTrick, leadPlayer);
         tricksPlayed++;
 
@@ -85,42 +96,67 @@ public class OfflineGameActivity extends AppCompatActivity {
         } else {
             tricksTeamThem++;
         }
+
         if (tricksPlayed == 5) {
-             tvInfo = findViewById(R.id.tvCenterInfo);
-            LinearLayout handContainer = findViewById(R.id.handContainer);
-
-            String result;
-            if (tricksTeamUs > tricksTeamThem) {
-                result = "ROUND OVER — YOU WIN (" +
-                        tricksTeamUs + " to " + tricksTeamThem + ")";
-            } else {
-                result = "ROUND OVER — YOU LOSE (" +
-                        tricksTeamUs + " to " + tricksTeamThem + ")";
-            }
-
-            tvInfo.setText(result);
-
-            // 🔒 LOCK UI
-            handContainer.removeAllViews();
-
-            return; // stop further logic
+            handleEndOfRound();
+            return;
         }
-
 
         tvInfo.setText(
                 "You played: " + currentTrick[0] +
                         "\nWinner of trick: Player " + winner
         );
 
-        // Prepare next trick
         leadPlayer = winner;
         engine.setCurrentPlayer(winner);
-
-        // Clear trick
         currentTrick = new Card[4];
 
-        // Re-render your hand
         renderMyHand();
     }
 
+    private void handleEndOfRound() {
+        boolean makersAreUs =
+                engine.getTrumpCaller() == 0 ||
+                        engine.getTrumpCaller() == 2;
+
+        String result;
+
+        if (makersAreUs) {
+            if (tricksTeamUs >= 3 && tricksTeamUs < 5) {
+                scoreUs += 1;
+                result = "YOU SCORE 1 POINT";
+            } else if (tricksTeamUs == 5) {
+                scoreUs += 2;
+                result = "YOU SCORE 2 POINTS (SWEEP)";
+            } else {
+                scoreThem += 2;
+                result = "YOU WERE EUCHRED! THEY SCORE 2";
+            }
+        } else {
+            if (tricksTeamThem >= 3 && tricksTeamThem < 5) {
+                scoreThem += 1;
+                result = "THEY SCORE 1 POINT";
+            } else if (tricksTeamThem == 5) {
+                scoreThem += 2;
+                result = "THEY SCORE 2 POINTS (SWEEP)";
+            } else {
+                scoreUs += 2;
+                result = "THEY WERE EUCHRED! YOU SCORE 2";
+            }
+        }
+
+        tvInfo.setText(
+                result +
+                        "\n\nSCORE\nUS: " + scoreUs +
+                        "\nTHEM: " + scoreThem
+        );
+
+        LinearLayout handContainer = findViewById(R.id.handContainer);
+        handContainer.removeAllViews();
+    }
+
+    private void hideTrumpButtons() {
+        btnOrderUp.setVisibility(View.GONE);
+        btnPass.setVisibility(View.GONE);
+    }
 }
