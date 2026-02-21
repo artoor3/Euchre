@@ -70,6 +70,17 @@ public class EuchreEngine {
     public Card getUpCard() {
         return upCard;
     }
+    public List<Card> getHand(int playerIndex) {
+        return Collections.unmodifiableList(players.get(playerIndex).getHand());
+    }
+
+    public Card[] getCurrentTrick() {
+        return currentTrick.clone();
+    }
+
+    public int[] getTeamScoresCopy() {
+        return teamScores.clone();
+    }
     public EuchreEngine() {
         initializePlayers();
     }

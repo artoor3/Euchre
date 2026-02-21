@@ -9,6 +9,9 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.Euchre">
         <activity
+            android:name=".GameActivityClean"
+            android:exported="false" />
+        <activity
             android:name=".AboutActivity"
             android:exported="false" />
         <activity

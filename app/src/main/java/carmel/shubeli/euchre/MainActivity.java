@@ -22,7 +22,7 @@ public class MainActivity extends AppCompatActivity {
         );
 
         btnOfflineGame.setOnClickListener(v ->
-                startActivity(new Intent(MainActivity.this, OfflineGameActivity.class))
+                startActivity(new Intent(MainActivity.this, GameActivityClean.class))
         );
 
         btnAbout.setOnClickListener(v ->
