@@ -1,0 +1,261 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#0B6623"
+    android:padding="12dp">
+
+    <!-- Banner -->
+    <TextView
+        android:id="@+id/bannerText"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:background="#FFFFFF"
+        android:padding="12dp"
+        android:text="Banner"
+        android:textStyle="bold"
+        android:textSize="16sp"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"/>
+
+    <!-- Opponent TOP (Player 2) -->
+    <LinearLayout
+        android:id="@+id/p2Box"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:gravity="center"
+        android:layout_marginTop="10dp"
+        app:layout_constraintTop_toBottomOf="@id/bannerText"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent">
+
+        <ImageView
+            android:id="@+id/p2Back"
+            android:layout_width="70dp"
+            android:layout_height="100dp"
+            android:src="@drawable/c_back"
+            android:scaleType="fitCenter"/>
+
+        <TextView
+            android:id="@+id/p2Count"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="P2: 5"
+            android:textColor="@android:color/white"/>
+    </LinearLayout>
+
+    <!-- Opponent LEFT (Player 1) -->
+    <LinearLayout
+        android:id="@+id/p1Box"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:gravity="center"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@id/trickTable"
+        app:layout_constraintBottom_toBottomOf="@id/trickTable">
+
+        <ImageView
+            android:id="@+id/p1Back"
+            android:layout_width="70dp"
+            android:layout_height="100dp"
+            android:src="@drawable/c_back"
+            android:scaleType="fitCenter"/>
+
+        <TextView
+            android:id="@+id/p1Count"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="P1: 5"
+            android:textColor="@android:color/white"/>
+    </LinearLayout>
+
+    <!-- Opponent RIGHT (Player 3) -->
+    <LinearLayout
+        android:id="@+id/p3Box"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:gravity="center"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="@id/trickTable"
+        app:layout_constraintBottom_toBottomOf="@id/trickTable">
+
+        <ImageView
+            android:id="@+id/p3Back"
+            android:layout_width="70dp"
+            android:layout_height="100dp"
+            android:src="@drawable/c_back"
+            android:scaleType="fitCenter"/>
+
+        <TextView
+            android:id="@+id/p3Count"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="P3: 5"
+            android:textColor="@android:color/white"/>
+    </LinearLayout>
+
+    <!-- Center Trick Table -->
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/trickTable"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_marginTop="10dp"
+        android:layout_marginBottom="10dp"
+        app:layout_constraintTop_toBottomOf="@id/p2Box"
+        app:layout_constraintBottom_toTopOf="@id/actionRow"
+        app:layout_constraintStart_toEndOf="@id/p1Box"
+        app:layout_constraintEnd_toStartOf="@id/p3Box">
+
+        <ImageView
+            android:id="@+id/trickP2"
+            android:layout_width="70dp"
+            android:layout_height="100dp"
+            android:src="@drawable/c_back"
+            android:scaleType="fitCenter"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"/>
+
+        <ImageView
+            android:id="@+id/trickP0"
+            android:layout_width="70dp"
+            android:layout_height="100dp"
+            android:src="@drawable/c_back"
+            android:scaleType="fitCenter"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"/>
+
+        <ImageView
+            android:id="@+id/trickP1"
+            android:layout_width="70dp"
+            android:layout_height="100dp"
+            android:src="@drawable/c_back"
+            android:scaleType="fitCenter"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"/>
+
+        <ImageView
+            android:id="@+id/trickP3"
+            android:layout_width="70dp"
+            android:layout_height="100dp"
+            android:src="@drawable/c_back"
+            android:scaleType="fitCenter"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"/>
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <!-- Action Row -->
+    <LinearLayout
+        android:id="@+id/actionRow"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:orientation="horizontal"
+        android:layout_marginBottom="8dp"
+        app:layout_constraintBottom_toTopOf="@id/handScroll"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent">
+        <Button
+            android:id="@+id/btnTrumpH"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="♥"
+            android:visibility="gone"/>
+
+        <Button
+            android:id="@+id/btnTrumpD"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="♦"
+            android:visibility="gone"/>
+
+        <Button
+            android:id="@+id/btnTrumpC"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="♣"
+            android:visibility="gone"/>
+
+        <Button
+            android:id="@+id/btnTrumpS"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="♠"
+            android:visibility="gone"/>
+        <Button
+            android:id="@+id/btnPass"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Pass"
+            android:visibility="gone"/>
+
+        <Button
+            android:id="@+id/btnOrderUp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Order Up"
+            android:layout_marginStart="8dp"
+            android:visibility="gone"/>
+
+        <Button
+            android:id="@+id/btnContinue"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Continue"
+            android:layout_marginStart="8dp"
+            android:visibility="gone"/>
+
+        <Button
+            android:id="@+id/btnAuto"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Auto"
+            android:layout_marginStart="8dp"/>
+    </LinearLayout>
+
+    <!-- Human hand -->
+    <HorizontalScrollView
+        android:id="@+id/handScroll"
+        android:layout_width="0dp"
+        android:layout_height="130dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent">
+
+        <LinearLayout
+            android:id="@+id/handContainer"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:orientation="horizontal"
+            android:gravity="center_vertical"/>
+    </HorizontalScrollView>
+    <ImageView
+        android:id="@+id/deckPile"
+        android:layout_width="70dp"
+        android:layout_height="100dp"
+        android:src="@drawable/c_back"
+        android:scaleType="fitCenter"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"/>
+    <ImageView
+        android:id="@+id/flyingCard"
+        android:layout_width="70dp"
+        android:layout_height="100dp"
+        android:src="@drawable/c_back"
+        android:visibility="gone"
+        android:elevation="30dp"
+        android:scaleType="fitCenter" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>
