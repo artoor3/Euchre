@@ -13,6 +13,16 @@ public class GameEngine {
     private int trumpCaller;
     private int[] teamScores = new int[2];
     private boolean trumpChosen = false;
+    private GamePhase phase;
+    private int currentPlayer;
+
+    public enum GamePhase {
+        DEALING,
+        CHOOSE_TRUMP,
+        DISCARD,
+        PLAY_TRICK,
+        ROUND_END
+    }
 
     public GameEngine() {
         // Initialize players (assuming Player has a no-argument constructor)
@@ -49,17 +59,26 @@ public class GameEngine {
         }
         Collections.shuffle(deck, new Random());
 
-        // Deal 5 cards to each player
-        for (int cardCount = 0; cardCount < 5; cardCount++) {
-            for (int playerIndex = 0; playerIndex < 4; playerIndex++) {
-                players[playerIndex].getHand().add(deck.remove(0));
+        int[] dealPattern = {2, 3};
+
+        for (int round = 0; round < 2; round++) {
+            for (int i = 1; i <= 4; i++) {
+                int player = (dealerIndex + i) % 4;
+                for (int c = 0; c < dealPattern[round]; c++) {
+                    players[player].getHand().add(deck.remove(0));
+                }
             }
         }
+
 
         // Turn up the next card as the potential trump card
         trumpCard = deck.remove(0);
         trumpSuit = null;
         trumpCaller = -1;
+        trumpChosen = false;
+
+        phase = GamePhase.CHOOSE_TRUMP;
+        currentPlayer = (dealerIndex + 1) % 4; // השחקן שמשמאל לדילר
     }
 
     /** Get the array of players. */
@@ -80,6 +99,16 @@ public class GameEngine {
     /** Get the Suit chosen as trump for this round (null if not decided yet). */
     public Suit getTrumpSuit() {
         return trumpSuit;
+    }
+    public int getCurrentPlayer() {
+        return currentPlayer;
+    }
+
+    public GamePhase getPhase() {
+        return phase;
+    }
+    public void advanceTurn() {
+        currentPlayer = (currentPlayer + 1) % 4;
     }
 
     /** Get the index of the player who called trump this round. */

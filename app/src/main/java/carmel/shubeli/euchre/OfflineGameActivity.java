@@ -10,6 +10,7 @@ import android.os.Handler;
 import androidx.appcompat.app.AppCompatActivity;
 
 import java.util.List;
+import carmel.shubeli.euchre.R;
 
 import carmel.shubeli.euchre.game.Card;
 import carmel.shubeli.euchre.game.GameEngine;
