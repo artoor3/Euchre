@@ -1,25 +1,42 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout
+    android:id="@+id/rootLayout"
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="#0B6623"
     android:padding="12dp">
-
-    <!-- Banner -->
-    <TextView
-        android:id="@+id/bannerText"
-        android:layout_width="0dp"
+    <LinearLayout
+        android:id="@+id/scoreBoard"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:background="#FFFFFF"
-        android:padding="12dp"
-        android:text="Banner"
-        android:textStyle="bold"
-        android:textSize="16sp"
+        android:orientation="vertical"
+        android:padding="10dp"
+        android:background="@drawable/bg_scoreboard"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"/>
+        app:layout_constraintStart_toStartOf="parent">
+
+        <TextView
+            android:id="@+id/tvScoreUs"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Your team: 0"
+            android:textColor="@android:color/white"
+            android:textStyle="bold"
+            android:textSize="14sp"/>
+
+        <TextView
+            android:id="@+id/tvScoreThem"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Other team: 0"
+            android:textColor="@android:color/white"
+            android:textStyle="bold"
+            android:textSize="14sp"
+            android:layout_marginTop="4dp"/>
+    </LinearLayout>
 
     <!-- Opponent TOP (Player 2) -->
     <LinearLayout
@@ -29,8 +46,7 @@
         android:orientation="vertical"
         android:gravity="center"
         android:layout_marginTop="10dp"
-        app:layout_constraintTop_toBottomOf="@id/bannerText"
-        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent">
 
         <ImageView
@@ -99,7 +115,6 @@
             android:text="P3: 5"
             android:textColor="@android:color/white"/>
     </LinearLayout>
-
     <!-- Center Trick Table -->
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/trickTable"
@@ -111,6 +126,7 @@
         app:layout_constraintBottom_toTopOf="@id/actionRow"
         app:layout_constraintStart_toEndOf="@id/p1Box"
         app:layout_constraintEnd_toStartOf="@id/p3Box">
+
 
         <ImageView
             android:id="@+id/trickP2"
@@ -225,13 +241,13 @@
 
     <!-- Human hand -->
     <HorizontalScrollView
+        android:contentDescription="Your hand of cards"
         android:id="@+id/handScroll"
         android:layout_width="0dp"
         android:layout_height="130dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent">
-
         <LinearLayout
             android:id="@+id/handContainer"
             android:layout_width="wrap_content"
@@ -250,12 +266,105 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"/>
     <ImageView
+        android:id="@+id/upCardView"
+        android:layout_width="70dp"
+        android:layout_height="100dp"
+        android:src="@drawable/c_back"
+        android:scaleType="fitCenter"
+        android:visibility="gone"
+        android:elevation="12dp"
+        android:contentDescription="@null"
+        app:layout_constraintTop_toTopOf="@id/deckPile"
+        app:layout_constraintBottom_toBottomOf="@id/deckPile"
+        app:layout_constraintStart_toStartOf="@id/deckPile"
+        app:layout_constraintEnd_toEndOf="@id/deckPile"
+        android:translationY="-10dp"/>
+
+    <ImageView
         android:id="@+id/flyingCard"
         android:layout_width="70dp"
         android:layout_height="100dp"
         android:src="@drawable/c_back"
         android:visibility="gone"
         android:elevation="30dp"
-        android:scaleType="fitCenter" />
+        android:scaleType="fitCenter"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"/>
+    <FrameLayout
+        android:id="@+id/scoringOverlay"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:visibility="gone"
+        android:background="#88000000"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent">
 
+        <LinearLayout
+            android:id="@+id/scoringCard"
+            android:layout_width="300dp"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:orientation="vertical"
+            android:padding="16dp"
+            android:background="@drawable/bg_scoring_card">
+
+            <TextView
+                android:id="@+id/tvScoringTitle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Hand Summary"
+                android:textColor="@android:color/white"
+                android:textStyle="bold"
+                android:textSize="18sp"/>
+
+            <TextView
+                android:id="@+id/tvTrump"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Trump: ?"
+                android:textColor="@android:color/white"
+                android:layout_marginTop="10dp"/>
+
+            <TextView
+                android:id="@+id/tvTricks"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Tricks - Us: 0  Them: 0"
+                android:textColor="@android:color/white"
+                android:layout_marginTop="10dp"/>
+
+            <TextView
+                android:id="@+id/tvPoints"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Points this hand - Us: 0  Them: 0"
+                android:textColor="@android:color/white"
+                android:layout_marginTop="8dp"/>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:background="#33FFFFFF"
+                android:layout_marginTop="12dp"
+                android:layout_marginBottom="12dp"/>
+
+            <TextView
+                android:id="@+id/tvTotalScore"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Total - Us: 0  Them: 0"
+                android:textColor="@android:color/white"
+                android:textStyle="bold"/>
+            <Button
+                android:id="@+id/btnContinueOverlay"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Continue"
+                android:layout_marginTop="14dp"/>
+        </LinearLayout>
+    </FrameLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>

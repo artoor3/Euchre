@@ -30,9 +30,7 @@ public class EuchreEngine {
     private int tricksTeam0 = 0;
     private int tricksTeam1 = 0;
     private int tricksPlayedThisHand = 0;
-
-
-
+    private int[] teamTricks = new int[]{0, 0};
 
 
     public int getTricksTeam0() { return tricksTeam0; }
@@ -41,6 +39,7 @@ public class EuchreEngine {
     public Suit getLedSuit() { return ledSuit; }
     public int getCardsPlayedInTrick() { return cardsPlayedInTrick; }
     public int getTrumpCaller() { return trumpCaller; }
+
     public GamePhase getPhase() {
         return phase;
     }
@@ -59,7 +58,11 @@ public class EuchreEngine {
     public int getCurrentPlayerIndex() {
         return currentPlayerIndex;
     }
-
+    public int[] getTeamTricks() {
+        teamTricks[0] = tricksTeam0;
+        teamTricks[1] = tricksTeam1;
+        return teamTricks;
+    }
     public List<Player> getPlayers() {
         return Collections.unmodifiableList(players);
     }
@@ -78,9 +81,6 @@ public class EuchreEngine {
         return currentTrick.clone();
     }
 
-    public int[] getTeamScoresCopy() {
-        return teamScores.clone();
-    }
     public EuchreEngine() {
         initializePlayers();
     }
@@ -220,6 +220,10 @@ public class EuchreEngine {
         Player dealer = players.get(dealerIndex);
         if (dealer.getHand().size() != 6) {
             throw new IllegalStateException("Dealer must have 6 cards before discard");
+        }
+        Card chosen = dealer.getHand().get(cardIndex);
+        if (chosen == upCard) {
+            throw new IllegalArgumentException("Dealer cannot discard the picked-up upCard");
         }
 
         dealer.getHand().remove(cardIndex);

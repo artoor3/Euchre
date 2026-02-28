@@ -33,7 +33,11 @@ public class GameController {
     public List<Card> getHumanHand() { return engine.getHand(HUMAN_INDEX); }
 
     public int getHandSize(int playerIndex) { return engine.getHand(playerIndex).size(); }
-
+    public int getCallerTeam() {
+        int caller = engine.getTrumpCaller();
+        if (caller < 0) return 0;
+        return engine.getPlayers().get(caller).getTeamId();
+    }
     public Card getUpCard() { return engine.getUpCard(); }
 
     public List<Suit> getSelectableTrumpSuitsRound2() {
@@ -62,11 +66,53 @@ public class GameController {
     public void playCardAsPlayer(int playerIndex, int cardIndex) { engine.playCard(playerIndex, cardIndex); }
 
     public void continueAfterScoring() {
+        // snapshot BEFORE scoring
+        int[] before = engine.getTeamScores();
+        int beforeUs = before[0], beforeThem = before[1];
+
+        int tricksUs = engine.getTricksTeam0();
+        int tricksThem = engine.getTricksTeam1();
+        Suit trump = engine.getTrumpSuit();
+
+        // do scoring + start next round
         engine.scoreHandAndStartNextRound();
+
+        // snapshot AFTER scoring
+        int[] after = engine.getTeamScores();
+        int afterUs = after[0], afterThem = after[1];
+
+        int gainedUs = afterUs - beforeUs;
+        int gainedThem = afterThem - beforeThem;
+
+        lastHandSummary = new HandSummary(
+                tricksUs, tricksThem,
+                gainedUs, gainedThem,
+                afterUs, afterThem,
+                trump
+        );
+
         handCounter++;
     }
+    public int getDealerIndex() {
+        return engine.getDealerIndex();
+    }
+    public int[] getTeamScores() {
+        return engine.getTeamScores();
+    }
+
+    public int getTricksTeam0() {
+        return engine.getTeamTricks()[0];
+    }
+
+    public int getTricksTeam1() {
+        return engine.getTeamTricks()[1];
+    }
+
+    public Suit getTrumpSuit() {
+        return engine.getTrumpSuit();
+    }
     // ---------- Legal indexes (UI help only) ----------
-    public List<Integer> computeLegalIndexes(int playerIndex) {
+    public List<Integer> computeLegalIndexes(int playerIndex) {//מחשב איזה קלפים הם חוקיים לשחק
         List<Integer> legal = new ArrayList<>();
 
         if (engine.getPhase() != GamePhase.PLAYING_TRICK) return legal;
@@ -94,5 +140,33 @@ public class GameController {
         }
 
         return legal;
+    }
+    public static class HandSummary {
+        public final int tricksUs;
+        public final int tricksThem;
+        public final int gainedUs;
+        public final int gainedThem;
+        public final int totalUs;
+        public final int totalThem;
+        public final Suit trump;
+
+        public HandSummary(int tricksUs, int tricksThem, int gainedUs, int gainedThem,
+                           int totalUs, int totalThem, Suit trump) {
+            this.tricksUs = tricksUs;
+            this.tricksThem = tricksThem;
+            this.gainedUs = gainedUs;
+            this.gainedThem = gainedThem;
+            this.totalUs = totalUs;
+            this.totalThem = totalThem;
+            this.trump = trump;
+        }
+    }
+
+    private HandSummary lastHandSummary = null;
+
+    public HandSummary consumeLastHandSummary() {
+        HandSummary h = lastHandSummary;
+        lastHandSummary = null;
+        return h;
     }
 }
