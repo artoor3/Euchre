@@ -502,7 +502,8 @@ public class EuchreEngineDealTest {
         int scoreCallerBefore = e.getTeamScores()[callerTeam];
         int scoreOtherBefore  = e.getTeamScores()[otherTeam];
 
-        e.scoreHandAndStartNextRound();
+        e.
+                scoreHandAndStartNextRound();
 
         assertEquals(scoreCallerBefore + 1, e.getTeamScores()[callerTeam]);
         assertEquals(scoreOtherBefore, e.getTeamScores()[otherTeam]);
