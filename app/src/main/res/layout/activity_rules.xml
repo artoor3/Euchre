@@ -1,51 +1,30 @@
-<?xml version="1.0" encoding="utf-8"?>
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:padding="16dp">
+    android:background="#F5F5F5">
 
-    <LinearLayout
+    <com.google.android.material.card.MaterialCardView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical">
+        android:layout_margin="16dp"
+        app:cardCornerRadius="12dp"
+        app:cardElevation="4dp"
+        app:strokeColor="#6200EE"
+        app:strokeWidth="1dp">
 
         <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Euchre Rules"
-            android:textSize="26sp"
-            android:textStyle="bold"
-            android:layout_marginBottom="16dp"/>
-
-        <TextView
+            android:id="@+id/tv_rules"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="
-Euchre is a trick-taking card game usually played by four players in two teams.
+            android:padding="20dp"
+            android:textColor="#333333"
+            android:textSize="16sp"
+            android:lineSpacingExtra="8sp"
+            android:fontFamily="sans-serif-light"
+            tools:ignore="HardcodedText"
+            android:text="EUCHRE RULES\n\n1. THE OBJECTIVE\nFirst team to 10 points wins. You win points by taking at least 3 out of 5 tricks in a round.\n\n2. THE DECK\nUses 24 cards: 9, 10, J, Q, K, and A of all suits.\n\n3. THE BOWERS (TRUMP)\nWhen a suit is Trump, the hierarchy is:\n• Right Bower: Jack of Trump (Highest)\n• Left Bower: Jack of same color (2nd Highest)\n• Ace, King, Queen, 10, 9 of Trump\n\n4. THE BIDDING\nPlayers choose to 'Order Up' the face-up card or pass. If all pass, any suit can be named Trump.\n\n5. SCORING\n• Take 3 or 4 tricks: 1 point\n• Take all 5 tricks: 2 points\n• Go Alone  take all 5: 4 points\n• Defenders 'Euchre' the makers: 2 points" />
 
-Cards:
-• Uses cards 9 through Ace (24 cards total)
-
-Trump:
-• One suit is chosen as trump each round
-• Jack of trump suit is the strongest card (Right Bower)
-• Jack of same color is second strongest (Left Bower)
-
-Gameplay:
-• Each player gets 5 cards
-• Players must follow suit if possible
-• Highest card wins the trick
-• There are 5 tricks per round
-
-Scoring:
-• Team that chose trump wins 1 point for 3–4 tricks
-• Winning all 5 tricks gives 2 points
-• If the choosing team fails, opponents get 2 points
-
-Goal:
-• First team to reach 10 points wins
-"
-            android:textSize="16sp"/>
-
-    </LinearLayout>
+    </com.google.android.material.card.MaterialCardView>
 </ScrollView>

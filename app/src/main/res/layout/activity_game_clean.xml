@@ -3,12 +3,40 @@
     android:id="@+id/rootLayout"
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="#0B6623"
     android:padding="12dp">
+    <LinearLayout
+        android:id="@+id/playerProfileBar"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:gravity="center_vertical"
+        android:padding="8dp"
+        android:layout_margin="8dp"
 
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintEnd_toEndOf="parent">
+
+        <ImageView
+            android:id="@+id/imgPlayerAvatar"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            android:scaleType="centerCrop"
+            android:src="@mipmap/ic_launcher" />
+
+        <TextView
+            android:id="@+id/tvPlayerNameInGame"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="10dp"
+            android:text="Player"
+            android:textColor="#FFFFFF"
+            android:textSize="18sp"
+            android:textStyle="bold" />
+
+    </LinearLayout>
     <!-- =========================================================
          DEALER CHIP
 
@@ -37,7 +65,7 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:gravity="center"
-            android:text="D"
+            android:text="@string/d"
             android:textStyle="bold"
             android:textSize="14sp"
             android:textColor="@android:color/black" />
@@ -62,7 +90,8 @@
             android:id="@+id/tvfinalTrump"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Trump: ?"
+
+            android:text = "@string/trump"
             android:textColor="@android:color/white"
             android:layout_marginTop="10dp" />
 
@@ -70,7 +99,7 @@
             android:id="@+id/tvCaller"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Caller: -"
+            android:text="@string/caller"
             android:textColor="@android:color/white"
             android:textStyle="bold"
             android:textSize="13sp"
@@ -94,7 +123,7 @@
             android:id="@+id/tvScoreUs"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Your team: 0"
+            android:text="@string/your_team_0"
             android:textColor="@android:color/white"
             android:textStyle="bold"
             android:textSize="14sp" />
@@ -103,7 +132,7 @@
             android:id="@+id/tvScoreThem"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Other team: 0"
+            android:text="@string/other_team_0"
             android:textColor="@android:color/white"
             android:textStyle="bold"
             android:textSize="14sp"
@@ -128,6 +157,7 @@
             android:id="@+id/p2Back"
             android:layout_width="70dp"
             android:layout_height="100dp"
+            android:contentDescription="@string/p2_hand"
             android:src="@drawable/c_back"
             android:scaleType="fitCenter" />
 
@@ -135,7 +165,7 @@
             android:id="@+id/p2Count"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="P2: 5"
+            android:text="@string/p2_5"
             android:textColor="@android:color/white" />
     </LinearLayout>
 
@@ -156,6 +186,7 @@
             android:id="@+id/p1Back"
             android:layout_width="70dp"
             android:layout_height="100dp"
+            android:contentDescription="@string/p1_hand"
             android:src="@drawable/c_back"
             android:scaleType="fitCenter" />
 
@@ -163,7 +194,7 @@
             android:id="@+id/p1Count"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="P1: 5"
+            android:text="@string/p1_5"
             android:textColor="@android:color/white" />
     </LinearLayout>
 
@@ -184,6 +215,7 @@
             android:id="@+id/p3Back"
             android:layout_width="70dp"
             android:layout_height="100dp"
+            android:contentDescription="@string/p3_hand"
             android:src="@drawable/c_back"
             android:scaleType="fitCenter" />
 
@@ -191,7 +223,7 @@
             android:id="@+id/p3Count"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="P3: 5"
+            android:text="@string/p3_5"
             android:textColor="@android:color/white" />
     </LinearLayout>
 
@@ -213,6 +245,7 @@
             android:id="@+id/trickP2"
             android:layout_width="70dp"
             android:layout_height="100dp"
+            android:importantForAccessibility="no"
             android:src="@drawable/c_back"
             android:scaleType="fitCenter"
             app:layout_constraintTop_toTopOf="parent"
@@ -223,6 +256,7 @@
             android:id="@+id/trickP0"
             android:layout_width="70dp"
             android:layout_height="100dp"
+            android:importantForAccessibility="no"
             android:src="@drawable/c_back"
             android:scaleType="fitCenter"
             app:layout_constraintBottom_toBottomOf="parent"
@@ -233,6 +267,7 @@
             android:id="@+id/trickP1"
             android:layout_width="70dp"
             android:layout_height="100dp"
+            android:importantForAccessibility="no"
             android:src="@drawable/c_back"
             android:scaleType="fitCenter"
             app:layout_constraintStart_toStartOf="parent"
@@ -243,6 +278,7 @@
             android:id="@+id/trickP3"
             android:layout_width="70dp"
             android:layout_height="100dp"
+            android:importantForAccessibility="no"
             android:src="@drawable/c_back"
             android:scaleType="fitCenter"
             app:layout_constraintEnd_toEndOf="parent"
@@ -255,6 +291,7 @@
          ========================================================= -->
     <LinearLayout
         android:id="@+id/actionRow"
+        style="?android:attr/buttonBarStyle"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:gravity="center"
@@ -266,53 +303,57 @@
 
         <Button
             android:id="@+id/btnTrumpH"
+            style="?android:attr/buttonBarButtonStyle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="♥"
+            android:text="@string/heart"
             android:visibility="gone" />
 
         <Button
             android:id="@+id/btnTrumpD"
+            style="?android:attr/buttonBarButtonStyle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="♦"
+            android:text="@string/diamond"
             android:visibility="gone" />
 
         <Button
             android:id="@+id/btnTrumpC"
+            style="?android:attr/buttonBarButtonStyle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="♣"
+            android:text="@string/clubs"
             android:visibility="gone" />
 
         <Button
             android:id="@+id/btnTrumpS"
+            style="?android:attr/buttonBarButtonStyle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="♠"
+            android:text="@string/spades"
             android:visibility="gone" />
 
         <Button
             android:id="@+id/btnPass"
+            style="?android:attr/buttonBarButtonStyle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Pass"
+            android:textColor="#FFFFFF"
+            app:backgroundTint="#6200EE"
+            android:text="@string/pass"
+            android:textAllCaps="true"
+            android:textColorLink="#F44336"
             android:visibility="gone" />
 
         <Button
             android:id="@+id/btnOrderUp"
+            style="?android:attr/buttonBarButtonStyle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Order Up"
             android:layout_marginStart="8dp"
-            android:visibility="gone" />
-
-        <Button
-            android:id="@+id/btnContinue"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Continue"
-            android:layout_marginStart="8dp"
+            android:textColor="#FFFFFF"
+            app:backgroundTint="#6200EE"
+            android:text="@string/order_up"
             android:visibility="gone" />
     </LinearLayout>
 
@@ -321,7 +362,7 @@
          ========================================================= -->
     <HorizontalScrollView
         android:id="@+id/handScroll"
-        android:contentDescription="Your hand of cards"
+        android:contentDescription="@string/your_hand_of_cards"
         android:layout_width="0dp"
         android:layout_height="130dp"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -343,6 +384,7 @@
         android:id="@+id/deckPile"
         android:layout_width="70dp"
         android:layout_height="100dp"
+        android:importantForAccessibility="no"
         android:src="@drawable/c_back"
         android:scaleType="fitCenter"
         app:layout_constraintTop_toTopOf="parent"
@@ -375,6 +417,7 @@
         android:id="@+id/flyingCard"
         android:layout_width="70dp"
         android:layout_height="100dp"
+        android:importantForAccessibility="no"
         android:src="@drawable/c_back"
         android:visibility="gone"
         android:elevation="30dp"
@@ -417,7 +460,7 @@
                 android:id="@+id/tvThinking"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Thinking..."
+                android:text="@string/thinking"
                 android:textColor="@android:color/white"
                 android:textStyle="bold" />
         </LinearLayout>
@@ -436,7 +479,7 @@
                 android:id="@+id/tvFinalCaller"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Caller: -"
+                android:text="@string/callerFinal"
                 android:textColor="@android:color/white"
                 android:layout_marginTop="6dp" />
 
@@ -444,7 +487,7 @@
                 android:id="@+id/tvScoringTitle"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Hand Summary"
+                android:text="@string/hand_summary"
                 android:textColor="@android:color/white"
                 android:textStyle="bold"
                 android:textSize="18sp" />
@@ -453,7 +496,7 @@
                 android:id="@+id/tvTrump"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Trump: ?"
+                android:text="@string/trumpTV"
                 android:textColor="@android:color/white"
                 android:layout_marginTop="10dp" />
 
@@ -461,7 +504,7 @@
                 android:id="@+id/tvTricks"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Tricks - Us: 0  Them: 0"
+                android:text="@string/tricks_us_0_them_0"
                 android:textColor="@android:color/white"
                 android:layout_marginTop="10dp" />
 
@@ -469,7 +512,7 @@
                 android:id="@+id/tvPoints"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Points this hand - Us: 0  Them: 0"
+                android:text="@string/points_this_hand_us_0_them_0"
                 android:textColor="@android:color/white"
                 android:layout_marginTop="8dp" />
 
@@ -484,7 +527,7 @@
                 android:id="@+id/tvTotalScore"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Total - Us: 0  Them: 0"
+                android:text="@string/total_us_0_them_0"
                 android:textColor="@android:color/white"
                 android:textStyle="bold" />
 
@@ -492,22 +535,73 @@
                 android:id="@+id/btnContinueOverlay"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Continue"
+                android:text="@string/continueOverlay"
                 android:layout_marginTop="14dp" />
         </LinearLayout>
-
-        <!-- ערימת טריקים/קלפים שנאספו -->
-        <ImageView
-            android:id="@+id/trickPile"
-            android:layout_width="60dp"
-            android:layout_height="86dp"
-            android:src="@drawable/c_back"
-            android:alpha="0.6"
-            android:scaleType="fitCenter"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            android:layout_marginTop="12dp"
-            android:layout_marginEnd="12dp" />
     </FrameLayout>
+    <!-- =========================================================
+         GAME OVER OVERLAY
+         מסך סיום משחק: ניצחון / הפסד + ניקוד סופי + כפתור משחק חדש
+         ========================================================= -->
+    <FrameLayout
+        android:id="@+id/gameOverOverlay"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:visibility="gone"
+        android:background="#AA000000"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent">
 
+        <LinearLayout
+            android:id="@+id/gameOverCard"
+            android:layout_width="320dp"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:orientation="vertical"
+            android:padding="20dp"
+            android:background="@drawable/bg_scoring_card">
+
+            <TextView
+                android:id="@+id/tvGameOverTitle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/game_over"
+                android:textColor="@android:color/white"
+                android:textStyle="bold"
+                android:textSize="22sp" />
+
+            <TextView
+                android:id="@+id/tvGameOverResult"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/you_won"
+                android:textColor="@android:color/white"
+                android:textStyle="bold"
+                android:textSize="20sp"
+                android:layout_marginTop="14dp" />
+
+            <TextView
+                android:id="@+id/tvGameOverReason"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/final_score_us_10_them_7"
+                android:textColor="@android:color/white"
+                android:layout_marginTop="10dp" />
+
+            <Button
+                android:id="@+id/btnNewGame"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/new_game"
+                android:layout_marginTop="18dp" />
+            <Button
+                android:id="@+id/btnMainMenu"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Main Menu"
+                android:layout_marginTop="12dp" />
+        </LinearLayout>
+    </FrameLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -1,26 +1,31 @@
 package carmel.shubeli.euchre;
+import android.annotation.SuppressLint;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
-import android.widget.HorizontalScrollView;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
-import android.util.Log;
 import androidx.appcompat.app.AppCompatActivity;
 import java.util.List;
-
+import android.widget.FrameLayout;
 import engine_clean.core.GamePhase;
 import engine_clean.model.Card;
 import engine_clean.model.Suit;
 import android.os.Handler;
 import android.os.Looper;
-
+import android.content.Intent;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.FirebaseDatabase;
+import android.util.Log;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.net.Uri;
 public class GameActivityClean extends AppCompatActivity {
-
+    private static final String TAG = "GameActivityClean";
     private GameController controller;
-    private static final String TAG = "EUCHRE_DEBUG";
     private ImageView trickP0, trickP1, trickP2, trickP3;
     private ImageView p1Back, p2Back, p3Back;
     private TextView p1Count, p2Count, p3Count;
@@ -30,10 +35,10 @@ public class GameActivityClean extends AppCompatActivity {
     private View rootLayout;
     private LinearLayout handContainer;
     private boolean orderUpAnimRunning = false;
-    private Button btnPass, btnOrderUp, btnContinue;
+    private Button btnPass, btnOrderUp;
     private Button btnTrumpH, btnTrumpD, btnTrumpC, btnTrumpS;
     private ImageView deckPile;
-    private boolean collectingTrickRunning = false;
+    private final boolean collectingTrickRunning = false;
     private ImageView flyingCard;
     private ImageView upCardView;
     private boolean dealingAnimationRunning = false;
@@ -42,8 +47,6 @@ public class GameActivityClean extends AppCompatActivity {
     private View scoringOverlay;
     private TextView tvScoringTitle, tvTricks, tvPoints, tvTotalScore;
     private Button btnContinueOverlay;
-    private int[] lastTotalScore = new int[]{0, 0};
-    private boolean scoringOverlayRunning = false;
     private int lastSeenHandNumber = -1; // כדי לדעת שמתחיל סיבוב חדש
     private GameRunner runner;
     private boolean uiLocked = false;
@@ -53,6 +56,15 @@ public class GameActivityClean extends AppCompatActivity {
     private int actionGen = 0;
     private static final long DEAL_START_DELAY_MS = 400;  // לפני שמתחילים את הקלפים לעוף
     private static final long DEAL_END_DELAY_MS = 700;  // אחרי שהחלוקה נגמרת לפני שמתחילים לשחק
+    private FrameLayout gameOverOverlay;
+    private TextView tvGameOverTitle;
+    private TextView tvGameOverResult;
+    private TextView tvGameOverReason;
+    private Button btnNewGame;
+    private boolean gameResultSaved = false;
+    private ImageView imgPlayerAvatar;
+    private TextView tvPlayerNameInGame;
+    private Button btnMainMenu;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -60,6 +72,7 @@ public class GameActivityClean extends AppCompatActivity {
         controller = new GameController();
 
         bindViews();
+        loadPlayerProfileUi();
         bindClicks();
         setupRunner();
         rootLayout.post(() -> moveDealerChipTo(controller.getDealerIndex(), false));
@@ -86,14 +99,13 @@ public class GameActivityClean extends AppCompatActivity {
 
         btnPass = findViewById(R.id.btnPass);
         btnOrderUp = findViewById(R.id.btnOrderUp);
-        btnContinue = findViewById(R.id.btnContinue);
         btnContinueOverlay = findViewById(R.id.btnContinueOverlay);
         btnTrumpH = findViewById(R.id.btnTrumpH);
         btnTrumpD = findViewById(R.id.btnTrumpD);
         btnTrumpC = findViewById(R.id.btnTrumpC);
         btnTrumpS = findViewById(R.id.btnTrumpS);
-        deckPile = findViewById(R.id.deckPile);
         flyingCard = findViewById(R.id.flyingCard);
+        deckPile = findViewById(R.id.deckPile);
         upCardView = findViewById(R.id.upCardView);
         tvScoreUs = findViewById(R.id.tvScoreUs);
         tvScoreThem = findViewById(R.id.tvScoreThem);
@@ -114,8 +126,14 @@ public class GameActivityClean extends AppCompatActivity {
         tvfinalTrump = findViewById(R.id.tvfinalTrump);
         rootLayout = findViewById(R.id.rootLayout);
         dealerChip = findViewById(R.id.dealerChip);
-        View pile = findViewById(R.id.deckPile); // או R.id.trickPile אם הוספת
-
+        gameOverOverlay = findViewById(R.id.gameOverOverlay);
+        tvGameOverTitle = findViewById(R.id.tvGameOverTitle);
+        tvGameOverResult = findViewById(R.id.tvGameOverResult);
+        tvGameOverReason = findViewById(R.id.tvGameOverReason);
+        btnNewGame = findViewById(R.id.btnNewGame);
+        btnMainMenu = findViewById(R.id.btnMainMenu);
+        imgPlayerAvatar = findViewById(R.id.imgPlayerAvatar);
+        tvPlayerNameInGame = findViewById(R.id.tvPlayerNameInGame);
     }
 
     private void bindClicks() {
@@ -134,7 +152,9 @@ public class GameActivityClean extends AppCompatActivity {
         });
 
         btnContinueOverlay.setOnClickListener(v -> {
-            if (controller.getPhase() != GamePhase.SCORING) return;
+            GamePhase phase = controller.getPhase();
+
+            if (phase != GamePhase.SCORING) return;
 
             scoringOverlay.setVisibility(View.GONE);
             disableAllActions(false);
@@ -143,7 +163,10 @@ public class GameActivityClean extends AppCompatActivity {
             dealerChip.setVisibility(View.VISIBLE);
 
             render();
-            runDealAnimation();
+            int[] scores = controller.getTeamScores(); // {team0, team1}
+            if(scores[0] < 10 && scores[1] < 10) {
+                runDealAnimation();
+            }
             runner.requestPump("user_continue");
         });
 
@@ -163,11 +186,25 @@ public class GameActivityClean extends AppCompatActivity {
             safeRun(() -> controller.orderUp(Suit.SPADES));
             render();
         });
+        btnNewGame.setOnClickListener(v -> {
+            gameOverOverlay.setVisibility(View.GONE);
+            gameResultSaved = false;
+            Intent intent = new Intent(GameActivityClean.this, GameActivityClean.class);
+            finish();
+            startActivity(intent);        });
+        btnMainMenu.setOnClickListener(v -> {
+            Intent intent = new Intent(GameActivityClean.this, MainActivity.class);
+            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP);
+            startActivity(intent);
+            finish();
+        });
     }
 
+    @SuppressLint("SetTextI18n")
     private void render() {
         GamePhase phase = controller.getPhase();
         if (maybeRunDealAnimation()) return;
+        if (dealingAnimationRunning) return;
         if (phase != GamePhase.PLAYING_TRICK) {
             controller.clearLastCompletedTrick();
         }
@@ -175,7 +212,6 @@ public class GameActivityClean extends AppCompatActivity {
         // buttons off by default
         btnPass.setVisibility(View.GONE);
         btnOrderUp.setVisibility(View.GONE);
-        btnContinue.setVisibility(View.GONE);
         upCardView.setVisibility(View.GONE);
 
         if (phase == GamePhase.ORDERING_TRUMP_ROUND1 && controller.isHumanTurn()) {
@@ -233,7 +269,6 @@ public class GameActivityClean extends AppCompatActivity {
                 btnOrderUp.setVisibility(View.VISIBLE);
             }
         } else if (phase == GamePhase.SCORING) {
-            btnContinue.setVisibility(View.VISIBLE);
             if (!scoringOverlayShown) {
                 scoringOverlayShown = true;
                 showScoringOverlay();
@@ -243,7 +278,8 @@ public class GameActivityClean extends AppCompatActivity {
             scoringOverlay.setVisibility(View.GONE);
         }
         if (phase == GamePhase.GAME_OVER) {
-            Toast.makeText(this, "GAME OVER", Toast.LENGTH_LONG).show();
+            Log.d(TAG, "render(): reached GAME_OVER");
+            showGameOverOverlay();
         }
         renderUpCard();
         if (controller.getUpCard() != null) {
@@ -369,11 +405,12 @@ public class GameActivityClean extends AppCompatActivity {
 
         if (handNo == lastSeenHandNumber) return false;
         lastSeenHandNumber = handNo;
-
+        renderScoreBoard();
         runDealAnimation();
         return true;
     }
 
+    @SuppressLint("SetTextI18n")
     private void runDealAnimation() {
         View root = findViewById(R.id.rootLayout);
         if (root == null) return;
@@ -390,9 +427,8 @@ public class GameActivityClean extends AppCompatActivity {
 
             btnPass.setVisibility(View.GONE);
             btnOrderUp.setVisibility(View.GONE);
-            btnContinue.setVisibility(View.GONE);
 
-            buildHandPlaceholders(5);
+            buildHandPlaceholders();
 
             flyingCard.setVisibility(View.VISIBLE);
             flyingCard.setX(start[0]);
@@ -438,9 +474,11 @@ public class GameActivityClean extends AppCompatActivity {
         flyingCard.setImageResource(R.drawable.c_back);
 
         flyingCard.animate().cancel();
+        assert start != null;
         flyingCard.setX(start[0]);
         flyingCard.setY(start[1]);
 
+        assert end != null;
         flyingCard.animate()
                 .x(end[0])
                 .y(end[1])
@@ -466,9 +504,9 @@ public class GameActivityClean extends AppCompatActivity {
                 .start();
     }
 
-    private void buildHandPlaceholders(int n) {
+    private void buildHandPlaceholders() {
         handContainer.removeAllViews();
-        for (int i = 0; i < n; i++) {
+        for (int i = 0; i < 5; i++) {
             ImageView slot = new ImageView(this);
             slot.setLayoutParams(new LinearLayout.LayoutParams(dp(70), dp(100)));
             slot.setImageResource(R.drawable.c_back);
@@ -489,7 +527,7 @@ public class GameActivityClean extends AppCompatActivity {
         if (player == 0) {
             // היד שלנו: היעד הוא הסלוט שיצרנו
             LinearLayout wrapper = (LinearLayout) handContainer.getChildAt(roundIndex);
-            return (ImageView) wrapper.getChildAt(0);
+            return wrapper.getChildAt(0);
         }
 
         // יריבים: ננחית "על הקלף back" שלהם (זה מספיק ויזואלית)
@@ -556,12 +594,14 @@ public class GameActivityClean extends AppCompatActivity {
             flyingCard.setAlpha(1f);
 
             flyingCard.setImageResource(CardArt.resIdForCard(this, controller.getUpCard()));
+            assert start != null;
             flyingCard.setX(start[0]);
             flyingCard.setY(start[1]);
 
             flyingCard.setVisibility(View.VISIBLE);
 
             // רק תנועה — בלי flip
+            assert end != null;
             flyingCard.animate()
                     .x(end[0])
                     .y(end[1])
@@ -610,11 +650,13 @@ public class GameActivityClean extends AppCompatActivity {
         flyingCard.setRotationY(0f);
 
         flyingCard.setImageResource(CardArt.resIdForCard(this, chosen));
+        assert start != null;
         flyingCard.setX(start[0]);
         flyingCard.setY(start[1]);
 
         flyingCard.setVisibility(View.VISIBLE);
 
+        assert end != null;
         flyingCard.animate()
                 .x(end[0])
                 .y(end[1])
@@ -721,19 +763,18 @@ public class GameActivityClean extends AppCompatActivity {
         return new int[]{cx, cy};
     }
 
+    @SuppressLint("SetTextI18n")
     private void renderScoreBoard() {
         int[] scores = controller.getTeamScores(); // {team0, team1}
         Suit trump = controller.getTrumpSuit();
-        int caller = controller.getTrumpCaller();
-
         String trumpText = (trump == null) ? "-" : trump.toString(); // או symbol
-        String callerText = (caller < 0) ? "-" : playerName(caller);
 
         tvTrump.setText("Trump: " + trumpText);
         tvScoreUs.setText("Your team: " + scores[0]);
         tvScoreThem.setText("Other team: " + scores[1]);
     }
 
+    @SuppressLint("SetTextI18n")
     private void showScoringOverlay() {
         scoringOverlay.setVisibility(View.VISIBLE);
         dealerChip.setVisibility(View.GONE);
@@ -758,14 +799,11 @@ public class GameActivityClean extends AppCompatActivity {
 
         // בזמן overlay רק Continue פעיל
         disableAllActions(true);
-        btnContinue.setEnabled(true);
-        btnContinue.setVisibility(View.VISIBLE);
     }
 
     private void disableAllActions(boolean disabled) {
         btnPass.setEnabled(!disabled);
         btnOrderUp.setEnabled(!disabled);
-        btnContinue.setEnabled(!disabled);
         btnTrumpH.setEnabled(!disabled);
         btnTrumpD.setEnabled(!disabled);
         btnTrumpC.setEnabled(!disabled);
@@ -959,6 +997,7 @@ public class GameActivityClean extends AppCompatActivity {
 
         int[] c = centerInRoot(anchor);
 
+        assert c != null;
         float targetX = c[0] - dealerChip.getWidth() / 2f;
         float targetY = c[1] - dealerChip.getHeight() / 2f;
 
@@ -978,6 +1017,112 @@ public class GameActivityClean extends AppCompatActivity {
                 .setDuration(300)
                 .start();
     }
+    @SuppressLint("SetTextI18n")
+    private void showGameOverOverlay() {
+        dealerChip.setVisibility(View.GONE);
+        Log.d(TAG, "showGameOverOverlay(): called");
 
+        int[] scores = controller.getTeamScores();
+        int us = scores[0];
+        int them = scores[1];
 
+        boolean weWon = us > them;
+        Log.d(TAG, "showGameOverOverlay(): us=" + us + ", them=" + them + ", weWon=" + weWon + ", gameResultSaved=" + gameResultSaved);
+
+        if (!gameResultSaved) {
+            saveMatchToFirebase(weWon, us, them);
+            gameResultSaved = true;
+        }
+        else {
+            Log.d(TAG, "showGameOverOverlay(): save skipped because gameResultSaved=true");
+        }
+
+        tvGameOverTitle.setText("GAME OVER");
+        tvGameOverResult.setText(weWon ? "YOU WON" : "YOU LOST");
+        tvGameOverReason.setText("Final score: Us " + us + " - Them " + them);
+
+        gameOverOverlay.setVisibility(View.VISIBLE);
+    }
+    private void saveMatchToFirebase(boolean won, int usScore, int themScore) {
+        Log.d(TAG, "saveMatchToFirebase(): called with won=" + won + ", usScore=" + usScore + ", themScore=" + themScore);
+
+        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+        if (user == null) {
+            Log.e(TAG, "saveMatchToFirebase(): currentUser is NULL");
+            return;
+        }
+
+        String uid = user.getUid();
+        Log.d(TAG, "saveMatchToFirebase(): user uid=" + uid);
+
+        PrefsManager prefs = new PrefsManager(this);
+        String playerName = prefs.getPlayerName();
+        String result = won ? "WIN" : "LOSS";
+
+        Log.d(TAG, "saveMatchToFirebase(): playerName=" + playerName + ", result=" + result);
+
+        MatchResult match = new MatchResult(
+                playerName,
+                result,
+                usScore,
+                themScore,
+                System.currentTimeMillis()
+        );
+
+        String key = FirebaseDatabase.getInstance()
+                .getReference("users")
+                .child(uid)
+                .child("matches")
+                .push()
+                .getKey();
+
+        Log.d(TAG, "saveMatchToFirebase(): generated key=" + key);
+
+        if (key == null) {
+            Log.e(TAG, "saveMatchToFirebase(): key is null");
+            return;
+        }
+
+        FirebaseDatabase.getInstance()
+                .getReference("users")
+                .child(uid)
+                .child("matches")
+                .child(key)
+                .setValue(match)
+                .addOnSuccessListener(unused -> {
+                    Log.d(TAG, "saveMatchToFirebase(): SUCCESS");
+                    Toast.makeText(this, "Match saved", Toast.LENGTH_SHORT).show();
+                })
+                .addOnFailureListener(e -> {
+                    Log.e(TAG, "saveMatchToFirebase(): FAILED -> " + e.getMessage(), e);
+                    Toast.makeText(this, "Save failed: " + e.getMessage(), Toast.LENGTH_LONG).show();
+                });
+    }
+    private void loadPlayerProfileUi() {
+        PrefsManager prefs = new PrefsManager(this);
+
+        String playerName = prefs.getPlayerName();
+        tvPlayerNameInGame.setText(playerName);
+
+        String cameraPath = prefs.getAvatarCameraPath();
+        if (cameraPath != null) {
+            Bitmap bitmap = BitmapFactory.decodeFile(cameraPath);
+            if (bitmap != null) {
+                imgPlayerAvatar.setImageBitmap(bitmap);
+                return;
+            }
+        }
+
+        String uri = prefs.getAvatarUri();
+        if (uri != null) {
+            try {
+                imgPlayerAvatar.setImageURI(Uri.parse(uri));
+                return;
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+
+        imgPlayerAvatar.setImageResource(R.mipmap.ic_launcher);
+    }
 }

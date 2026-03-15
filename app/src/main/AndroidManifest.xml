@@ -9,17 +9,20 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.Euchre">
         <activity
+            android:name=".HistoryActivity"
+            android:exported="false" />
+        <activity
+            android:name=".ProfileActivity"
+            android:exported="false" />
+        <activity
             android:name=".GameActivityClean"
             android:exported="false" />
         <activity
             android:name=".AboutActivity"
             android:exported="false" />
         <activity
-            android:name=".OfflineGameActivity"
-            android:exported="false" />
-        <activity
             android:name=".RulesActivity"
-            android:exported="false" /> <!-- START SCREEN -->
+            android:exported="false" />
         <activity
             android:name=".StartActivity"
             android:exported="true">

@@ -7,31 +7,53 @@
     android:padding="24dp">
 
     <TextView
+        android:id="@+id/tvTitle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Euchre"
         android:textSize="32sp"
         android:textStyle="bold"
-        android:layout_marginBottom="40dp"/>
-
-    <Button
-        android:id="@+id/btnRules"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="Rules"
-        android:layout_marginBottom="16dp"/>
+        android:layout_marginBottom="32dp" />
 
     <Button
         android:id="@+id/btnOfflineGame"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="Offline Game"
-        android:layout_marginBottom="16dp"/>
+        android:layout_marginBottom="16dp" />
+
+    <Button
+        android:id="@+id/btnProfile"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Profile"
+        android:layout_marginBottom="16dp" />
+
+    <Button
+        android:id="@+id/btnHistory"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Match History"
+        android:layout_marginBottom="16dp" />
+
+    <Button
+        android:id="@+id/btnRules"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Rules"
+        android:layout_marginBottom="16dp" />
 
     <Button
         android:id="@+id/btnAbout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="About" />
+        android:text="About"
+        android:layout_marginBottom="16dp" />
+
+    <Button
+        android:id="@+id/btnLogout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Logout" />
 
 </LinearLayout>

@@ -23,14 +23,14 @@ public class EuchreEngine {
     private final int[] teamScores = new int[]{0, 0};
     private int passesInRow = 0;
     private int trumpCaller = -1;
-    private Card[] currentTrick = new Card[4];
+    private final Card[] currentTrick = new Card[4];
     private Suit ledSuit = null;
     private int cardsPlayedInTrick = 0;
     private int leadPlayerIndex = -1;
     private int tricksTeam0 = 0;
     private int tricksTeam1 = 0;
     private int tricksPlayedThisHand = 0;
-    private int[] teamTricks = new int[]{0, 0};
+    private final int[] teamTricks = new int[]{0, 0};
 
 
     public int getTricksTeam0() { return tricksTeam0; }
@@ -48,9 +48,6 @@ public class EuchreEngine {
         return trumpSuit;
     }
 
-    public Player getCurrentPlayer() {
-        return players.get(currentPlayerIndex);
-    }
 
     public int[] getTeamScores() {
         return teamScores;
@@ -232,7 +229,7 @@ public class EuchreEngine {
         phase = GamePhase.PLAYING_TRICK;
         currentPlayerIndex = (dealerIndex + 1) % 4;
     }
-    public Card playCard(int playerIndex, int cardIndex) {
+    public void playCard(int playerIndex, int cardIndex) {
         if (phase != GamePhase.PLAYING_TRICK) {
             throw new IllegalStateException("Play not allowed in phase: " + phase);
         }
@@ -286,13 +283,12 @@ public class EuchreEngine {
                 phase = GamePhase.SCORING;
             }
 
-            return played;
+            return;
         }
 
         // התור עובר הלאה (עדיין בלי הכרעת טריק)
         currentPlayerIndex = (currentPlayerIndex + 1) % 4;
 
-        return played;
     }
     private int nonTrumpValue(Rank r) {
         if (r == Rank.ACE) return 6;

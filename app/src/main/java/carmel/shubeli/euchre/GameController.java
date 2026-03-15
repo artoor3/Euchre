@@ -16,7 +16,6 @@ public class GameController {
     private Card[] lastCompletedTrick = null;
 
     public int getHandNumberMarker() { return handCounter; }
-    private HandSummary lastHandSummary = null;
 
     public GameController() {
         engine = new EuchreEngine();
@@ -44,15 +43,6 @@ public class GameController {
     }
     public Card getUpCard() { return engine.getUpCard(); }
 
-    public List<Suit> getSelectableTrumpSuitsRound2() {
-        List<Suit> suits = new ArrayList<>();
-        Suit forbidden = engine.getUpCard().getSuit();
-        for (Suit s : Suit.values()) {
-            if (s != forbidden) suits.add(s);
-        }
-        return suits;
-    }
-
     public List<Integer> getLegalCardIndexesForHuman() {
         return computeLegalIndexes(HUMAN_INDEX);
     }
@@ -78,30 +68,8 @@ public class GameController {
         engine.playCard(playerIndex, cardIndex);
     }
     public void continueAfterScoring() {
-        // snapshot BEFORE scoring
-        int[] before = engine.getTeamScores();
-        int beforeUs = before[0], beforeThem = before[1];
-
-        int tricksUs = engine.getTricksTeam0();
-        int tricksThem = engine.getTricksTeam1();
-        Suit trump = engine.getTrumpSuit();
-
         // do scoring + start next round
         engine.scoreHandAndStartNextRound();
-
-        // snapshot AFTER scoring
-        int[] after = engine.getTeamScores();
-        int afterUs = after[0], afterThem = after[1];
-
-        int gainedUs = afterUs - beforeUs;
-        int gainedThem = afterThem - beforeThem;
-
-        lastHandSummary = new HandSummary(
-                tricksUs, tricksThem,
-                gainedUs, gainedThem,
-                afterUs, afterThem,
-                trump
-        );
 
         handCounter++;
     }
@@ -152,26 +120,6 @@ public class GameController {
         }
 
         return legal;
-    }
-    public static class HandSummary {
-        public final int tricksUs;
-        public final int tricksThem;
-        public final int gainedUs;
-        public final int gainedThem;
-        public final int totalUs;
-        public final int totalThem;
-        public final Suit trump;
-
-        public HandSummary(int tricksUs, int tricksThem, int gainedUs, int gainedThem,
-                           int totalUs, int totalThem, Suit trump) {
-            this.tricksUs = tricksUs;
-            this.tricksThem = tricksThem;
-            this.gainedUs = gainedUs;
-            this.gainedThem = gainedThem;
-            this.totalUs = totalUs;
-            this.totalThem = totalThem;
-            this.trump = trump;
-        }
     }
 
     public boolean isHumanDealerAndMustDiscard() {
@@ -226,7 +174,7 @@ public class GameController {
         if (before == null) return;
 
         Card[] snap = new Card[4];
-        for (int i = 0; i < 4; i++) snap[i] = before[i];
+        System.arraycopy(before, 0, snap, 0, 4);
 
         snap[playerIndex] = played;
 
@@ -238,7 +186,4 @@ public class GameController {
     }
     public Suit getLedSuit() { return engine.getLedSuit(); }
     public List<Card> getHandForPlayer(int playerIndex) { return engine.getHand(playerIndex); }
-    public boolean isTrickCompletedForUi() {
-        return lastCompletedTrick != null;
-    }
 }
