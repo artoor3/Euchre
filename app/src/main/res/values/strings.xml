@@ -35,4 +35,23 @@
     <string name="you_won">YOU WON</string>
     <string name="new_game">New Game</string>
     <string name="final_score_us_10_them_7">Final score: Us 10 - Them 7</string>
+    <string name="player">Player</string>
+    <string name="main_menu">Main Menu</string>
+    <string name="euchre">Euchre</string>
+    <string name="offline_game">Offline Game</string>
+    <string name="profile">Profile</string>
+    <string name="match_history">Match History</string>
+    <string name="rules">Rules</string>
+    <string name="about">About</string>
+    <string name="logout">Logout</string>
+    <string name="register">Register</string>
+    <string name="email">Email</string>
+    <string name="register0">Register</string>
+    <string name="password">Password</string>
+    <string name="login">Login</string>
+    <string name="welcome_to_euchre">Welcome to Euchre</string>
+    <string name="player0">Player</string>
+    <string name="win">WIN</string>
+    <string name="us_10_them_8">Us 10 - Them 8</string>
+    <string name="date">date</string>
 </resources>

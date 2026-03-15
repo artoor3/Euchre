@@ -40,11 +40,14 @@ dependencies {
     implementation(libs.activity)
     implementation(libs.constraintlayout)
 
+    //noinspection UseTomlInstead,GradleDependency
     implementation(platform("com.google.firebase:firebase-bom:33.12.0"))
 
     implementation(libs.firebase.auth)
+    //noinspection UseTomlInstead
     implementation("com.google.firebase:firebase-database")
 
+    //noinspection UseTomlInstead,GradleDependency
     implementation("androidx.recyclerview:recyclerview:1.3.2")
 
     implementation(libs.credentials)

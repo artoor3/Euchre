@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
@@ -10,7 +11,7 @@
         android:id="@+id/tvTitle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Euchre"
+        android:text="@string/euchre"
         android:textSize="32sp"
         android:textStyle="bold"
         android:layout_marginBottom="32dp" />
@@ -19,41 +20,47 @@
         android:id="@+id/btnOfflineGame"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Offline Game"
-        android:layout_marginBottom="16dp" />
+        android:text="@string/offline_game"
+        android:layout_marginBottom="16dp"
+        tools:ignore="VisualLintButtonSize" />
 
     <Button
         android:id="@+id/btnProfile"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Profile"
-        android:layout_marginBottom="16dp" />
+        android:text="@string/profile"
+        android:layout_marginBottom="16dp"
+        tools:ignore="VisualLintButtonSize" />
 
     <Button
         android:id="@+id/btnHistory"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Match History"
-        android:layout_marginBottom="16dp" />
+        android:text="@string/match_history"
+        android:layout_marginBottom="16dp"
+        tools:ignore="VisualLintButtonSize" />
 
     <Button
         android:id="@+id/btnRules"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Rules"
-        android:layout_marginBottom="16dp" />
+        android:text="@string/rules"
+        android:layout_marginBottom="16dp"
+        tools:ignore="VisualLintButtonSize" />
 
     <Button
         android:id="@+id/btnAbout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="About"
-        android:layout_marginBottom="16dp" />
+        android:text="@string/about"
+        android:layout_marginBottom="16dp"
+        tools:ignore="VisualLintButtonSize" />
 
     <Button
         android:id="@+id/btnLogout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Logout" />
+        android:text="@string/logout"
+        tools:ignore="VisualLintButtonSize" />
 
 </LinearLayout>

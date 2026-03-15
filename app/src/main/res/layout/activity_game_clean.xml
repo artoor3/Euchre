@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/rootLayout"
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
@@ -23,15 +23,17 @@
             android:id="@+id/imgPlayerAvatar"
             android:layout_width="48dp"
             android:layout_height="48dp"
+            android:importantForAccessibility="no"
             android:scaleType="centerCrop"
-            android:src="@mipmap/ic_launcher" />
+            android:src="@mipmap/ic_launcher"
+            tools:ignore="ImageContrastCheck" />
 
         <TextView
             android:id="@+id/tvPlayerNameInGame"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="10dp"
-            android:text="Player"
+            android:text="@string/player"
             android:textColor="#FFFFFF"
             android:textSize="18sp"
             android:textStyle="bold" />
@@ -600,7 +602,7 @@
                 android:id="@+id/btnMainMenu"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Main Menu"
+                android:text="@string/main_menu"
                 android:layout_marginTop="12dp" />
         </LinearLayout>
     </FrameLayout>
