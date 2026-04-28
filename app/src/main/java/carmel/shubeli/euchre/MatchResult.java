@@ -7,6 +7,8 @@ public class MatchResult {
     public int usScore;
     public int themScore;
     public long timestamp;
+    public MatchResult() {
+    }
     public MatchResult(String playerName, String result, int usScore, int themScore, long timestamp) {
         this.playerName = playerName;
         this.result = result;

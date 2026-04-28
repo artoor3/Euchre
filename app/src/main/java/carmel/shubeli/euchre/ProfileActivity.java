@@ -1,6 +1,5 @@
 package carmel.shubeli.euchre;
 
-import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -20,15 +19,19 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 
 public class ProfileActivity extends AppCompatActivity {
+
     private ActivityResultLauncher<Void> cameraLauncher;
+    private ActivityResultLauncher<String[]> galleryLauncher;
+
     private ImageView imageProfile;
     private EditText etPlayerName;
+    private Button btnChooseImage;
+    private Button btnTakePhoto;
+    private Button btnSaveProfile;
 
     private Uri selectedImageUri;
     private PrefsManager prefsManager;
-    private ActivityResultLauncher<String[]> galleryLauncher;
 
-    @SuppressLint({"MissingInflatedId", "WrongViewCast"})
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -36,11 +39,12 @@ public class ProfileActivity extends AppCompatActivity {
 
         prefsManager = new PrefsManager(this);
 
-        imageProfile = findViewById(R.id.playerProfileBar);
-        Button btnChooseImage = findViewById(R.id.btnNewGame);
-        Button btnSaveProfile = findViewById(R.id.btnSaveProfile);
-        etPlayerName = findViewById(R.id.tvPlayerName);
-        Button btnTakePhoto = findViewById(R.id.btnTakePhoto);
+        imageProfile = findViewById(R.id.imageProfile);
+        btnChooseImage = findViewById(R.id.btnChooseImage);
+        btnTakePhoto = findViewById(R.id.btnTakePhoto);
+        btnSaveProfile = findViewById(R.id.btnSaveProfile);
+        etPlayerName = findViewById(R.id.etPlayerName);
+
         galleryLauncher = registerForActivityResult(
                 new ActivityResultContracts.OpenDocument(),
                 uri -> {
@@ -61,6 +65,7 @@ public class ProfileActivity extends AppCompatActivity {
                     }
                 }
         );
+
         cameraLauncher = registerForActivityResult(
                 new ActivityResultContracts.TakePicturePreview(),
                 bitmap -> {
@@ -75,14 +80,16 @@ public class ProfileActivity extends AppCompatActivity {
                     }
                 }
         );
+
         loadProfile();
 
         btnChooseImage.setOnClickListener(v ->
                 galleryLauncher.launch(new String[]{"image/*"}));
 
-        btnSaveProfile.setOnClickListener(v -> saveProfile());
-        btnTakePhoto.setOnClickListener(v -> cameraLauncher.launch(null));
+        btnTakePhoto.setOnClickListener(v ->
+                cameraLauncher.launch(null));
 
+        btnSaveProfile.setOnClickListener(v -> saveProfile());
     }
 
     private void loadProfile() {
@@ -111,6 +118,7 @@ public class ProfileActivity extends AppCompatActivity {
             }
         }
     }
+
     private void saveProfile() {
         String name = etPlayerName.getText().toString().trim();
 
@@ -127,8 +135,14 @@ public class ProfileActivity extends AppCompatActivity {
 
         Toast.makeText(this, "Profile saved", Toast.LENGTH_SHORT).show();
     }
+
     private String saveBitmapToInternalStorage(Bitmap bitmap) {
-        File file = new File(getFilesDir(), "profile_camera.jpg");
+        String uid = "guest";
+        if (com.google.firebase.auth.FirebaseAuth.getInstance().getCurrentUser() != null) {
+            uid = com.google.firebase.auth.FirebaseAuth.getInstance().getCurrentUser().getUid();
+        }
+
+        File file = new File(getFilesDir(), "profile_camera_" + uid + ".jpg");
 
         try (FileOutputStream fos = new FileOutputStream(file)) {
             bitmap.compress(Bitmap.CompressFormat.JPEG, 90, fos);
@@ -140,4 +154,4 @@ public class ProfileActivity extends AppCompatActivity {
             return null;
         }
     }
-    }
+}
