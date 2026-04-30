@@ -11,8 +11,8 @@ import carmel.shubeli.euchre.GameController;
 public class BasicAiPolicy {
 
     // thresholds you can tune
-    private static final int ORDER_R1_THRESHOLD = 16; // "good enough" hand in upcard suit
-    private static final int ORDER_R2_THRESHOLD = 18; // round2 usually needs a bit more confidence
+    private static final int ORDER_R1_THRESHOLD = 16; // "good enough" hand in upcard suit 16
+    private static final int ORDER_R2_THRESHOLD = 18; // round2 usually needs a bit more confidence 18
 
     public enum OrderDecisionType { PASS, ORDER_UP_R1, ORDER_UP_R2 }
     public static class OrderDecision {

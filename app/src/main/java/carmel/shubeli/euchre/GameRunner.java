@@ -94,19 +94,16 @@ public class GameRunner {
     private void pump(String reason) {
         Snap before = snap();
         boolean uiBusy = cb.isUiBusy();
-
         Log.d(TAG, "RUNNER.pump ENTER reason=" + reason
                 + " BEFORE " + before
                 + " uiBusy=" + uiBusy
                 + " aiPending=" + aiPending);
-
         // 1) GAME_OVER: פשוט לשחרר
         if (before.phase == GamePhase.GAME_OVER) {
             unlockAndRender();
             Log.d(TAG, "RUNNER.pump STOP: game_over");
             return;
         }
-
         // 2) SCORING: פה לא "סתם לעצור" - פה עושים איסוף קלפים ואז render
         // כדי לא להפעיל את זה 100 פעם, צריך guard.
         if (before.phase == GamePhase.SCORING) {
@@ -115,7 +112,6 @@ public class GameRunner {
             Log.d(TAG, "RUNNER.pump STOP: scoring");
             return;
         }
-
         // 3) תור אדם: לשחרר UI ולצאת
         if (before.humanTurn) {
             unlockAndRender();
@@ -129,14 +125,12 @@ public class GameRunner {
             return;
         }
         uiBusyStreak = 0;
-
         // 5) אם כבר יש AI scheduled / אנימציה בריצה שמחוברת לפעולה => לא לעשות כלום
         // כי finishAiAction() אמור לקרוא requestPump.
         if (aiPending) {
             Log.d(TAG, "RUNNER.pump STOP: aiPending (waiting for scheduled AI/animation)");
             return;
         }
-
         // 6) תור AI + UI פנוי + אין pending => schedule פעולה אחת בלבד
         scheduleAiStep(before);
     }

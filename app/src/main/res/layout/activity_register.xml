@@ -1,17 +1,21 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/main"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:background="#F3F4F6"
+    android:padding="24dp">
 
     <TextView
         android:id="@+id/titleRegister"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/register"
-        android:textSize="32sp"
+        android:textSize="30sp"
+        android:textStyle="bold"
+        android:textColor="#1E293B"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
@@ -20,41 +24,46 @@
     <EditText
         android:id="@+id/editTextEmailAddress"
         android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_margin="24dp"
+        android:layout_height="56dp"
+        android:layout_marginTop="32dp"
+        android:layout_marginHorizontal="24dp"
+        android:backgroundTint="#6366F1"
         android:hint="@string/email"
-        android:importantForAutofill="no"
+        android:padding="16dp"
+        android:textColor="#111827"
+        android:textColorHint="#9CA3AF"
         android:inputType="textEmailAddress"
-        android:textColorHint="#546E7A"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/titleRegister"
-        tools:ignore="TouchTargetSizeCheck,VisualLintTextFieldSize" />
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"/>
 
     <EditText
         android:id="@+id/editTextPassword"
         android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginHorizontal="24dp"
+        android:layout_height="56dp"
         android:layout_marginTop="16dp"
+        android:layout_marginHorizontal="24dp"
+        android:backgroundTint="#6366F1"
         android:hint="@string/password"
-        android:importantForAutofill="no"
+        android:padding="16dp"
+        android:textColor="#111827"
+        android:textColorHint="#9CA3AF"
         android:inputType="textPassword"
-        android:textColorHint="#546E7A"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/editTextEmailAddress"
-        tools:ignore="TouchTargetSizeCheck,VisualLintTextFieldSize" />
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"/>
 
     <Button
         android:id="@+id/btnRegister"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="24dp"
+        android:layout_width="0dp"
+        android:layout_height="56dp"
+        android:layout_marginTop="28dp"
+        android:layout_marginHorizontal="24dp"
         android:text="@string/register0"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
+        android:textColor="@android:color/white"
+        android:backgroundTint="#6366F1"
         app:layout_constraintTop_toBottomOf="@id/editTextPassword"
-        tools:ignore="DuplicateSpeakableTextCheck" />
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"/>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

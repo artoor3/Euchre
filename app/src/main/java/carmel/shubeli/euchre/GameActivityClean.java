@@ -171,19 +171,25 @@ public class GameActivityClean extends AppCompatActivity {
         });
 
         btnTrumpH.setOnClickListener(v -> {
-            safeRun(() -> controller.orderUp(Suit.HEARTS));
+            safeRun(() -> {
+                controller.orderUp(Suit.HEARTS);
+                runner.requestPump("call");
+            });
             render();
         });
         btnTrumpD.setOnClickListener(v -> {
             safeRun(() -> controller.orderUp(Suit.DIAMONDS));
+            runner.requestPump("call");
             render();
         });
         btnTrumpC.setOnClickListener(v -> {
             safeRun(() -> controller.orderUp(Suit.CLUBS));
+            runner.requestPump("call");
             render();
         });
         btnTrumpS.setOnClickListener(v -> {
             safeRun(() -> controller.orderUp(Suit.SPADES));
+            runner.requestPump("call");
             render();
         });
         btnNewGame.setOnClickListener(v -> {
